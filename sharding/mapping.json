@@ -1,0 +1,18 @@
+{
+  "0": "Host=localhost;Port=5440;Database=db_0;Username=lab6;Password=lab6pwd",
+  "1": "Host=localhost;Port=5440;Database=db_1;Username=lab6;Password=lab6pwd",
+  "2": "Host=localhost;Port=5440;Database=db_2;Username=lab6;Password=lab6pwd",
+  "3": "Host=localhost;Port=5440;Database=db_3;Username=lab6;Password=lab6pwd",
+  "4": "Host=localhost;Port=5441;Database=db_4;Username=lab6;Password=lab6pwd",
+  "5": "Host=localhost;Port=5441;Database=db_5;Username=lab6;Password=lab6pwd",
+  "6": "Host=localhost;Port=5441;Database=db_6;Username=lab6;Password=lab6pwd",
+  "7": "Host=localhost;Port=5441;Database=db_7;Username=lab6;Password=lab6pwd",
+  "8": "Host=localhost;Port=5442;Database=db_8;Username=lab6;Password=lab6pwd",
+  "9": "Host=localhost;Port=5442;Database=db_9;Username=lab6;Password=lab6pwd",
+  "a": "Host=localhost;Port=5442;Database=db_a;Username=lab6;Password=lab6pwd",
+  "b": "Host=localhost;Port=5442;Database=db_b;Username=lab6;Password=lab6pwd",
+  "c": "Host=localhost;Port=5443;Database=db_c;Username=lab6;Password=lab6pwd",
+  "d": "Host=localhost;Port=5443;Database=db_d;Username=lab6;Password=lab6pwd",
+  "e": "Host=localhost;Port=5443;Database=db_e;Username=lab6;Password=lab6pwd",
+  "f": "Host=localhost;Port=5443;Database=db_f;Username=lab6;Password=lab6pwd"
+}

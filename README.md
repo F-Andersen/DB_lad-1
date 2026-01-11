@@ -58,21 +58,21 @@ db/
 
 ### Travel Plans
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/TravelPlans | Get all travel plans (paginated) |
-| GET | /api/TravelPlans/{id} | Get travel plan by ID |
-| POST | /api/TravelPlans | Create new travel plan |
-| PUT | /api/TravelPlans/{id} | Update travel plan |
-| DELETE | /api/TravelPlans/{id} | Delete travel plan |
+| Method | Endpoint              | Description                      |
+| ------ | --------------------- | -------------------------------- |
+| GET    | /api/TravelPlans      | Get all travel plans (paginated) |
+| GET    | /api/TravelPlans/{id} | Get travel plan by ID            |
+| POST   | /api/TravelPlans      | Create new travel plan           |
+| PUT    | /api/TravelPlans/{id} | Update travel plan               |
+| DELETE | /api/TravelPlans/{id} | Delete travel plan               |
 
 ### Locations
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/Locations/{planId}/locations | Add location to travel plan |
-| PUT | /api/Locations/{id} | Update location |
-| DELETE | /api/Locations/{id} | Delete location |
+| Method | Endpoint                          | Description                 |
+| ------ | --------------------------------- | --------------------------- |
+| POST   | /api/Locations/{planId}/locations | Add location to travel plan |
+| PUT    | /api/Locations/{id}               | Update location             |
+| DELETE | /api/Locations/{id}               | Delete location             |
 
 ## Getting Started
 
@@ -89,6 +89,7 @@ docker-compose up -d
 ```
 
 The API will be available at:
+
 - HTTP: http://localhost:6001
 - HTTPS: https://localhost:6061
 
@@ -96,10 +97,13 @@ The API will be available at:
 
 1. Update connection string in `appsettings.json`
 2. Apply migrations:
+
 ```bash
 dotnet ef database update
 ```
+
 3. Run the application:
+
 ```bash
 dotnet run --project BD_LAB_TEST_PROJECT
 ```
@@ -120,12 +124,12 @@ Configure PostgreSQL connection in `appsettings.json` or via environment variabl
 
 ### Docker Services
 
-| Service | Description | Port |
-|---------|-------------|------|
-| traveler-api | ASP.NET Core API | 8080 |
-| travelerdb | PostgreSQL Primary (Publisher) | 5432 |
+| Service            | Description                     | Port  |
+| ------------------ | ------------------------------- | ----- |
+| traveler-api       | ASP.NET Core API                | 8080  |
+| travelerdb         | PostgreSQL Primary (Publisher)  | 5432  |
 | travelerdb_replica | PostgreSQL Replica (Subscriber) | 55432 |
-| pgadmin | pgAdmin 4 Web UI | 5050 |
+| pgadmin            | pgAdmin 4 Web UI                | 5050  |
 
 ### Docker Environment Variables
 
@@ -145,6 +149,7 @@ The project uses PostgreSQL logical replication with Publisher-Subscriber model.
 ### Replication Configuration
 
 Publisher is configured with:
+
 - `wal_level=logical`
 - `max_replication_slots=10`
 - `max_wal_senders=10`
@@ -161,22 +166,25 @@ The project includes K6 performance tests located in `tests/performance-tests/`.
 
 ### Test Types
 
-| Test | Description | Command |
-|------|-------------|---------|
-| Smoke Test | Basic functionality check with 1 VU | `k6 run smoke-test.js` |
-| Load Test | Normal load simulation (50 VUs) | `k6 run load-test.js` |
-| Stress Test | Gradually increasing load (up to 300 VUs) | `k6 run stress-test.js` |
-| Spike Test | Sudden traffic spike (500 VUs) | `k6 run spike-test.js` |
-| Endurance Test | Extended duration test (40 min) | `k6 run endurance-test.js` |
+| Test           | Description                               | Command                    |
+| -------------- | ----------------------------------------- | -------------------------- |
+| Smoke Test     | Basic functionality check with 1 VU       | `k6 run smoke-test.js`     |
+| Load Test      | Normal load simulation (50 VUs)           | `k6 run load-test.js`      |
+| Stress Test    | Gradually increasing load (up to 300 VUs) | `k6 run stress-test.js`    |
+| Spike Test     | Sudden traffic spike (500 VUs)            | `k6 run spike-test.js`     |
+| Endurance Test | Extended duration test (40 min)           | `k6 run endurance-test.js` |
 
 ### Running Tests
 
 1. Install K6: https://k6.io/docs/get-started/installation/
 2. Start the API with Docker:
+
 ```bash
 docker-compose up -d
 ```
+
 3. Run tests:
+
 ```bash
 cd tests/performance-tests
 k6 run smoke-test.js
@@ -195,3 +203,7 @@ This project is for educational purposes.
 ## Screenshots
 
 ![Replication Demo](image.png)
+
+![Screenshot 1](image1.png)
+
+![Screenshot 2](image2.png)

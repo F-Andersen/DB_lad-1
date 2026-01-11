@@ -1,0 +1,12 @@
+-- PostgreSQL Node 3: Create databases db_c, db_d, db_e, db_f
+
+CREATE DATABASE db_c;
+CREATE DATABASE db_d;
+CREATE DATABASE db_e;
+CREATE DATABASE db_f;
+
+-- Grant permissions
+GRANT ALL PRIVILEGES ON DATABASE db_c TO lab6;
+GRANT ALL PRIVILEGES ON DATABASE db_d TO lab6;
+GRANT ALL PRIVILEGES ON DATABASE db_e TO lab6;
+GRANT ALL PRIVILEGES ON DATABASE db_f TO lab6;
