@@ -1,0 +1,30 @@
+services:
+  traveler-api:
+    image: ${DOCKER_REGISTRY-}travelerapi
+    build:
+      context: .
+      dockerfile: BD_LAB_TEST_PROJECT/Dockerfile
+    depends_on:
+      traveler-db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  traveler-db:
+    image: postgres:16-alpine
+    container_name: travelerdb
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: TravelerDb
+    volumes:
+      - travelerdb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d TravelerDb || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  travelerdb: {}
