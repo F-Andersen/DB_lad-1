@@ -191,3 +191,7 @@ k6 run -e API_URL=http://localhost:6001 smoke-test.js
 ## License
 
 This project is for educational purposes.
+
+## Screenshots
+
+![Replication Demo](image.png)
