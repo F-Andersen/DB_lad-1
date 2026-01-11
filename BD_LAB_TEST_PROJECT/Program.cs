@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BD_LAB_TEST_PROJECT.Extensions;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddCustomServices(configuration);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Enable Prometheus HTTP metrics (request count, duration, status codes)
+app.UseHttpMetrics();
 
 if (app.Environment.IsDevelopment())
 {
@@ -29,5 +33,9 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+// Prometheus metrics endpoint
+app.MapMetrics();
+
 app.UseExceptionHandler(options => { });
 app.Run();
