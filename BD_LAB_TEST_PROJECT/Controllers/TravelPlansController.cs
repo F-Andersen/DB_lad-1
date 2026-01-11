@@ -70,7 +70,8 @@ namespace BD_LAB_TEST_PROJECT.Controllers
 
             var id = await _plans.CreateAsync(plan, ct);
 
-            return CreatedAtAction(nameof(Get), new { id }, new { id });
+            Response.Headers.Location = $"/api/travel-plans/{id}";
+            return StatusCode(StatusCodes.Status201Created, new { id });
         }
 
 

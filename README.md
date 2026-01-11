@@ -9,6 +9,7 @@ REST API for managing travel plans and locations built with ASP.NET Core 9.0 and
 - PostgreSQL 16
 - Docker & Docker Compose
 - Swagger/OpenAPI
+- K6 (Performance Testing)
 
 ## Project Structure
 
@@ -29,6 +30,20 @@ BD_LAB_TEST_PROJECT/
 ├── Migrations/           # EF Core migrations
 ├── Exceptions/           # Custom exception handlers
 └── Extensions/           # Service extensions
+
+tests/
+└── performance-tests/    # K6 performance tests
+    ├── config/
+    │   └── endpoints.js
+    ├── utils/
+    │   ├── api-client.js
+    │   ├── data-generator.js
+    │   └── response-utils.js
+    ├── smoke-test.js
+    ├── load-test.js
+    ├── stress-test.js
+    ├── spike-test.js
+    └── endurance-test.js
 ```
 
 ## API Endpoints
@@ -100,6 +115,39 @@ Configure PostgreSQL connection in `appsettings.json` or via environment variabl
 - `POSTGRES_USER` - Database user (default: postgres)
 - `POSTGRES_PASSWORD` - Database password (default: postgres)
 - `POSTGRES_DB` - Database name (default: TravelerDb)
+
+## Performance Testing (K6)
+
+The project includes K6 performance tests located in `tests/performance-tests/`.
+
+### Test Types
+
+| Test | Description | Command |
+|------|-------------|---------|
+| Smoke Test | Basic functionality check with 1 VU | `k6 run smoke-test.js` |
+| Load Test | Normal load simulation (50 VUs) | `k6 run load-test.js` |
+| Stress Test | Gradually increasing load (up to 300 VUs) | `k6 run stress-test.js` |
+| Spike Test | Sudden traffic spike (500 VUs) | `k6 run spike-test.js` |
+| Endurance Test | Extended duration test (40 min) | `k6 run endurance-test.js` |
+
+### Running Tests
+
+1. Install K6: https://k6.io/docs/get-started/installation/
+2. Start the API with Docker:
+```bash
+docker-compose up -d
+```
+3. Run tests:
+```bash
+cd tests/performance-tests
+k6 run smoke-test.js
+```
+
+### Custom API URL
+
+```bash
+k6 run -e API_URL=http://localhost:6001 smoke-test.js
+```
 
 ## License
 
