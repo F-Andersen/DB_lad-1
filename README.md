@@ -6,10 +6,11 @@ REST API for managing travel plans and locations built with ASP.NET Core 9.0 and
 
 - ASP.NET Core 9.0
 - Entity Framework Core 9.0
-- PostgreSQL 16
+- PostgreSQL 16 (with Logical Replication)
 - Docker & Docker Compose
 - Swagger/OpenAPI
 - K6 (Performance Testing)
+- pgAdmin 4
 
 ## Project Structure
 
@@ -44,6 +45,13 @@ tests/
     ├── stress-test.js
     ├── spike-test.js
     └── endurance-test.js
+
+db/
+├── migrations/           # Database migrations
+└── replications/         # Replication scripts
+    ├── common/           # Init scripts for both nodes
+    ├── publisher/        # Publisher node scripts
+    └── subscriber/       # Subscriber node scripts
 ```
 
 ## API Endpoints
@@ -110,11 +118,42 @@ Configure PostgreSQL connection in `appsettings.json` or via environment variabl
 }
 ```
 
+### Docker Services
+
+| Service | Description | Port |
+|---------|-------------|------|
+| traveler-api | ASP.NET Core API | 8080 |
+| travelerdb | PostgreSQL Primary (Publisher) | 5432 |
+| travelerdb_replica | PostgreSQL Replica (Subscriber) | 55432 |
+| pgadmin | pgAdmin 4 Web UI | 5050 |
+
 ### Docker Environment Variables
 
 - `POSTGRES_USER` - Database user (default: postgres)
 - `POSTGRES_PASSWORD` - Database password (default: postgres)
 - `POSTGRES_DB` - Database name (default: TravelerDb)
+
+## PostgreSQL Logical Replication
+
+The project uses PostgreSQL logical replication with Publisher-Subscriber model.
+
+### Architecture
+
+- **Publisher (travelerdb)** - Primary database that publishes changes
+- **Subscriber (travelerdb_replica)** - Replica that subscribes to changes
+
+### Replication Configuration
+
+Publisher is configured with:
+- `wal_level=logical`
+- `max_replication_slots=10`
+- `max_wal_senders=10`
+
+### pgAdmin Access
+
+- URL: http://localhost:5050
+- Email: admin@local.dev
+- Password: admin
 
 ## Performance Testing (K6)
 

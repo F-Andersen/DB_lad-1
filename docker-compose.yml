@@ -1,30 +1,99 @@
 services:
+
   traveler-api:
-    image: ${DOCKER_REGISTRY-}travelerapi
+    image: travelerapi
     build:
       context: .
       dockerfile: BD_LAB_TEST_PROJECT/Dockerfile
-    depends_on:
-      traveler-db:
-        condition: service_healthy
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: >
+        Host=travelerdb;
+        Port=5432;
+        Database=TravelerDb;
+        Username=postgres;
+        Password=postgres
+    depends_on:
+      travelerdb:
+        condition: service_healthy
 
-  traveler-db:
+  travelerdb:
     image: postgres:16-alpine
     container_name: travelerdb
     restart: unless-stopped
+
+    command:
+      - "postgres"
+      - "-c"
+      - "listen_addresses=*"
+      - "-c"
+      - "wal_level=logical"
+      - "-c"
+      - "max_replication_slots=10"
+      - "-c"
+      - "max_wal_senders=10"
+      - "-c"
+      - "max_logical_replication_workers=4"
+      - "-c"
+      - "max_worker_processes=10"
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: TravelerDb
+
     volumes:
-      - travelerdb:/var/lib/postgresql/data
+      - travelerdb_data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-migrations:ro
+      - ./db/replications/publisher:/docker-entrypoint-replications:ro
+      - ./db/replications/common:/docker-entrypoint-initdb.d:ro
+
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d TravelerDb || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d TravelerDb"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  travelerdb_replica:
+    image: postgres:16-alpine
+    container_name: travelerdb_replica
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: TravelerDb
+
+    volumes:
+      - travelerdb_replica_data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-migrations:ro
+      - ./db/replications/subscriber:/docker-entrypoint-replications:ro
+      - ./db/replications/common:/docker-entrypoint-initdb.d:ro
+
+    ports:
+      - "55432:5432"
+
+    depends_on:
+      travelerdb:
+        condition: service_healthy
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: traveler_pgadmin
+    restart: unless-stopped
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@local.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+    ports:
+      - "5050:80"
+
+    depends_on:
+      travelerdb:
+        condition: service_healthy
+
+
 volumes:
-  travelerdb: {}
+  travelerdb_data:
+  travelerdb_replica_data:
